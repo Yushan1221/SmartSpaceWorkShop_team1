@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<script src="./dist/echarts.min410rc2.js"></script>
+<script src="./dist/echarts-gl11.min.js"></script>
+<script src="./dist/simplex-noise.js"></script>
+<script src="./dist/turf.min.js" charset="utf-8"></script>
+<!-- <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.44.1/mapbox-gl.js'></script>
+<link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.44.1/mapbox-gl.css' rel='stylesheet' /> -->
+<script src='https://api.tiles.mapbox.com/mapbox-gl-js/v1.8.0/mapbox-gl.js'></script>
+<link href='https://api.tiles.mapbox.com/mapbox-gl-js/v1.8.0/mapbox-gl.css' rel='stylesheet' />
+<script type="text/javascript" src="./dist/jquery-3.2.1.min.js"></script>
+<script src="map.js"></script>
+<link type="text/css" rel="stylesheet" href="./css/pm25-map.css?v=2">
+<link type="text/css" rel="stylesheet" href="./dist/jquery.toast.min.css">
+
+<head>
+    <meta charset="utf-8">
+    <!-- 處理畫面有時過度放大的問題 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+    <title>偏鄉醫療 - 無人機送藥服務</title>
+</head>
+
+<body scroll="no" style="overflow: hidden">
+
+    <header>
+        <h1><a href="https://www.canva.com/design/DAGXpV93jok/a8ogtoPXbpf_3Has6qUd8A/view?utm_content=DAGXpV93jok&utm_campaign=designshare&utm_medium=link2&utm_source=uniquelinks&utlId=h6bc8b2cc7f" target="_blank">
+            埔里基督教醫院無人機送藥服務
+        </a></h1>
+    </header>
+
+    <div id="main">
+        <div id='map'></div>
+    </div>
+
+    <script type="text/javascript">
+        //設定地圖出現時的中心座標點。
+        let centerCoord = [23.98187588281007, 120.99880464174812];
+        let centerCoord2 = [120.99880464174812, 23.98187588281007];
+        //設定數據高度。
+        let dataHeight = 50;
+        //設定送要坐標點
+        // const markerData = [
+        //     { "station": "埔里基督教醫院", "coord": [120.94635206575228, 23.970551942745583] },
+        //     { "station": "圓通寺", "coord": [120.91396944762806, 23.988389433794246] },
+        //     { "station": "天元佛院", "coord": [121.00372941770593, 23.960025790417024] },
+        //     { "station": "南豐國小", "coord": [121.07844281622576, 24.000192278208416] },
+        //     { "station": "仁愛鄉公所 ", "coord": [121.13197624718437, 24.02268268978168] },
+        // ];
+
+        var line1 = [[120.94636765083033, 23.970582362040982], [ 121.0796410289517,24.005415921380088]];
+        var line2 = [[121.0796410289517, 24.005415921380088], [121.13151450334395, 24.023235726536026]]; 
+        var line3 = [[120.94636765083033, 23.970582362040982], [ 121.00377818221675, 23.960154860591402]];
+        var line4 = [[120.94636765083033, 23.970582362040982], [ 120.91396944762806, 23.988389433794246]];
+
+        init(centerCoord);
+        loadMap();
+        // createMapMarker(centerCoord2, markerData);
+
+        var lines = [line1, line2, line3, line4];
+        var points = lines.flatMap(line => createLineCoords(line, 10, 500));
+
+    
+        // var points = createSqureCoords(centerCoord, 0.3);                //輸入中心點與正方形半徑(KM)
+        // var points = createStarCoords(centerCoord, 0.3);                 //輸入中心點與米字半徑(KM)
+        // var points = createFunnelCoords(centerCoord, 0.3);               //輸入中心點與漏斗形半徑(KM)
+        // var points = createCircleCoords(centerCoord, 0.3);               //輸入中心點與圓形半徑(KM)
+        // var points = createSpringCoords(centerCoord, 0.2, 5, 10, 200);    //輸入中心點, 圓形半徑(KM), 圓圈數, 最低高度(m), 最高高度(m)
+        // var points = createPyramidCoords(centerCoord, 0.3, 0.97, 9, 20, dataHeight)  //輸入中心點、正方形半徑(KM), 遞減半徑比例, 層數, 層高(m), 最低高度(m)
+
+        loadScatterFlightPlanPath(points);
+        // loadScatterFlightPlanPath(points.concat(points1));
+    </script>
+</body>
